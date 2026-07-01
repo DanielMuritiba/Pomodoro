@@ -253,28 +253,6 @@ h6 {
 
 /* fim - toggle */
 
-/* Para Tablets */
-@media (max-width: 1024px) and (min-width: 768px) {
-  .app__section-banner-container {
-    width: 48rem;
-  }
-}
-
-/* Para Celulares */
-@media (max-width: 767px) {
-  .app__section-banner-container {
-    width: 32rem;
-  }
-
-  .app__title {
-    font-size: 2.6rem;
-  }
-
-  .app__card-timer {
-    font-size: 6rem;
-  }
-}
-
 /* dropdown */
 .dropdown-container {
   position: relative;
@@ -317,6 +295,13 @@ h6 {
 }
 
 /* fim - dropdown */
+
+/* Para Tablets */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .app__section-banner-container {
+    width: 48rem;
+  }
+}
 
 /* Para Celulares */
 @media (max-width: 767px) {
