@@ -51,6 +51,7 @@ function createElementTask(task) {
   button.onclick = () => {
     const newText = prompt("Qual é o novo nome da tarefa?");
     p.textContent = newText;
+    task.descricao = newText;
 
     updateTask();
   };
