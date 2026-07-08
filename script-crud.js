@@ -12,6 +12,7 @@ const taskOnGoingDescription = document.querySelector(
   ".app__section-active-task-description",
 );
 let selectedTask = null;
+const selectedTaskClass = "app__section-task-list-item-active";
 
 btnAddTask.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
@@ -80,17 +81,15 @@ function createElementTask(task) {
     taskOnGoingDescription.textContent = task.descricao;
 
     if (selectedTask != li) {
-      document
-        .querySelectorAll(".app__section-task-list-item-active")
-        .forEach((e) => {
-          console.log(e);
-          e.classList.remove("app__section-task-list-item-active");
-        });
+      document.querySelectorAll("." + selectedTaskClass).forEach((e) => {
+        console.log(e);
+        e.classList.remove(selectedTaskClass);
+      });
 
-      li.classList.add("app__section-task-list-item-active");
+      li.classList.add(selectedTaskClass);
       selectedTask = li;
     } else {
-      li.classList.remove("app__section-task-list-item-active");
+      li.classList.remove(selectedTaskClass);
       taskOnGoingDescription.textContent = "";
       selectedTask = null;
     }
@@ -107,4 +106,12 @@ function refreshList(task) {
 taskList.forEach((task) => {
   const taskElement = createElementTask(task);
   taskUl.append(taskElement);
+});
+
+document.addEventListener("endedFocus", () => {
+  if (selectedTask) {
+    selectedTask.classList.remove(selectedTaskClass);
+    selectedTask.classList.add("app__section-task-list-item-complete");
+    selectedTask.querySelector("button").setAttribute("disabled", "disabled");
+  }
 });
