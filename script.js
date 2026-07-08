@@ -52,10 +52,18 @@ startPauseBt.addEventListener("click", iniciarOuPausar);
 const contagemRegressiva = () => {
   if (second <= 0) {
     endSound.play();
+
+    const activeFocus = html.getAttribute("data-contexto") == "foco";
+    if (activeFocus) {
+      const event = new CustomEvent("endedFocus");
+      document.dispatchEvent(event);
+    }
+
     pausar();
     return;
   }
   second -= 1;
+  displayTime();
 };
 
 function alterarContexto(contexto) {
