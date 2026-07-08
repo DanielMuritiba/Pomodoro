@@ -1,4 +1,7 @@
 const btnAddTask = document.querySelector(".app__button--add-task");
+const btnCancelTask = document.querySelector(
+  ".app__form-footer__button--cancel",
+);
 const formAddTask = document.querySelector(".app__form-add-task");
 
 const textArea = document.querySelector(".app__form-textarea");
@@ -9,6 +12,11 @@ const taskUl = document.querySelector(".app__section-task-list");
 
 btnAddTask.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
+});
+
+btnCancelTask.addEventListener("click", () => {
+  textArea.value = "";
+  formAddTask.classList.add("hidden");
 });
 
 function updateTask() {
