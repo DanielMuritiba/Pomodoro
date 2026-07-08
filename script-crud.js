@@ -2,13 +2,16 @@ const btnAddTask = document.querySelector(".app__button--add-task");
 const btnCancelTask = document.querySelector(
   ".app__form-footer__button--cancel",
 );
-const formAddTask = document.querySelector(".app__form-add-task");
 
+const formAddTask = document.querySelector(".app__form-add-task");
 const textArea = document.querySelector(".app__form-textarea");
 
 const taskList = JSON.parse(localStorage.getItem("taskList")) ?? [];
-
 const taskUl = document.querySelector(".app__section-task-list");
+const taskOnGoingDescription = document.querySelector(
+  ".app__section-active-task-description",
+);
+let selectedTask = null;
 
 btnAddTask.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
@@ -72,6 +75,26 @@ function createElementTask(task) {
   button.append(imageButton);
   button.classList.add("app_button-edit");
   li.append(svg, p, button);
+
+  li.onclick = () => {
+    taskOnGoingDescription.textContent = task.descricao;
+
+    if (selectedTask != li) {
+      document
+        .querySelectorAll(".app__section-task-list-item-active")
+        .forEach((e) => {
+          console.log(e);
+          e.classList.remove("app__section-task-list-item-active");
+        });
+
+      li.classList.add("app__section-task-list-item-active");
+      selectedTask = li;
+    } else {
+      li.classList.remove("app__section-task-list-item-active");
+      taskOnGoingDescription.textContent = "";
+      selectedTask = null;
+    }
+  };
 
   return li;
 }
