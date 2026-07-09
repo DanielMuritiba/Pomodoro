@@ -6,13 +6,17 @@ const btnCancelTask = document.querySelector(
 const formAddTask = document.querySelector(".app__form-add-task");
 const textArea = document.querySelector(".app__form-textarea");
 
-const taskList = JSON.parse(localStorage.getItem("taskList")) ?? [];
+let taskList = JSON.parse(localStorage.getItem("taskList")) ?? [];
 const taskUl = document.querySelector(".app__section-task-list");
 const taskOnGoingDescription = document.querySelector(
   ".app__section-active-task-description",
 );
 let selectedTask = null;
+let selectedTaskObje = null;
 const selectedTaskClass = "app__section-task-list-item-active";
+
+const btnRemoveCompleted = document.querySelector("#btn-remover-concluidas");
+const btnRemoveAll = document.querySelector("#btn-remover-todas");
 
 btnAddTask.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
@@ -77,23 +81,29 @@ function createElementTask(task) {
   button.classList.add("app_button-edit");
   li.append(svg, p, button);
 
-  li.onclick = () => {
-    taskOnGoingDescription.textContent = task.descricao;
+  if (task.completed) {
+    li.classList.add("app__section-task-list-item-complete");
+    button.setAttribute("disabled", "disabled");
+  } else {
+    li.onclick = () => {
+      taskOnGoingDescription.textContent = task.descricao;
 
-    if (selectedTask != li) {
-      document.querySelectorAll("." + selectedTaskClass).forEach((e) => {
-        console.log(e);
-        e.classList.remove(selectedTaskClass);
-      });
+      if (selectedTask != li) {
+        document.querySelectorAll("." + selectedTaskClass).forEach((e) => {
+          console.log(e);
+          e.classList.remove(selectedTaskClass);
+        });
 
-      li.classList.add(selectedTaskClass);
-      selectedTask = li;
-    } else {
-      li.classList.remove(selectedTaskClass);
-      taskOnGoingDescription.textContent = "";
-      selectedTask = null;
-    }
-  };
+        li.classList.add(selectedTaskClass);
+        selectedTask = li;
+        selectedTaskObje = task;
+      } else {
+        li.classList.remove(selectedTaskClass);
+        taskOnGoingDescription.textContent = "";
+        selectedTask = null;
+      }
+    };
+  }
 
   return li;
 }
@@ -113,5 +123,25 @@ document.addEventListener("endedFocus", () => {
     selectedTask.classList.remove(selectedTaskClass);
     selectedTask.classList.add("app__section-task-list-item-complete");
     selectedTask.querySelector("button").setAttribute("disabled", "disabled");
+
+    selectedTaskObje.completed = true;
+
+    updateTask();
   }
 });
+
+const removeTasks = (onlyCompleted) => {
+  const completedTasks = onlyCompleted
+    ? ".app__section-task-list-item-complete"
+    : ".app__section-task-list-item";
+
+  document.querySelectorAll(completedTasks).forEach((e) => {
+    e.remove();
+  });
+
+  taskList = onlyCompleted ? taskList.filter((task) => !task.completed) : [];
+  updateTask();
+};
+
+btnRemoveCompleted.onclick = () => removeTasks(true);
+btnRemoveAll.onclick = () => removeTasks();
